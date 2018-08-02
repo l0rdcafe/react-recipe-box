@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import LSM from "./local-storage-manager";
 import recipesArr from "./recipes";
 import Dialog from "./dialog";
@@ -90,21 +91,16 @@ class App extends React.Component {
     }
 
     this.showRecipe(tabToFocus);
-    const recipes = this.state.recipes.filter(recipe => recipe.recipe !== e.currentTarget.value);
+    const recipes = this.state.recipes.filter(recipe => recipe.recipe.toLowerCase() !== e.currentTarget.value);
     LSM.set(recipes);
-    this.setState({ recipes });
+    this.setState({ recipes, currRecipe: tabToFocus });
   };
   populateFormData = str => {
     if (str === "") {
       return null;
     }
-    let recipe;
-
-    for (let i = 0; i < this.state.recipes.length; i += 1) {
-      if (this.state.recipes[i].recipe === str) {
-        recipe = this.state.recipes[i];
-      }
-    }
+    const recipe = this.state.recipes.find(r => r.recipe.toLowerCase() === str);
+    console.log(recipe);
 
     setTimeout(() => {
       document.getElementById("edit-recipe-name").value = recipe.recipe.replace(/-/g, " ");
@@ -119,7 +115,7 @@ class App extends React.Component {
       dialogType: indicator,
       showDialog: !this.state.showDialog
     });
-    const val = e.currentTarget.value ? "" : e.currentTarget.value;
+    const val = e.currentTarget.value ? e.currentTarget.value : "";
     this.populateFormData(val);
   };
   render() {
@@ -148,22 +144,35 @@ class App extends React.Component {
       );
     }
     return (
-      <div className="recipe-box-wrapper">
-        <div className="heading">Recipe Box</div>
-        {dialogBox}
-        <IndexView handleClick={this.showOnClick} contents={this.state.recipes} />
-        <RecipePane
-          contents={this.state.recipes}
-          displayRecipe={this.state.currRecipe}
-          handleDelete={this.deleteRecipe}
-          handleEdit={this.toggleDialogDisplay}
-        />
-        <div className="add-button">
-          <button id="add-recipe" title="Add Recipe" onClick={this.toggleDialogDisplay}>
-            <i className="far fa-plus-square" />
-          </button>
-        </div>
-      </div>
+      <Router>
+        <Switch>
+          <div className="recipe-box-wrapper">
+            <div className="heading">Recipe Box</div>
+            {dialogBox}
+            <IndexView handleClick={this.showOnClick} contents={this.state.recipes} />
+            <Route exact path="/" render={() => <Redirect to={this.state.currRecipe ? `/${this.state.currRecipe}` : ""} />} />
+            {this.state.recipes.map(recipe => (
+              <Route
+                key={recipe.recipe}
+                path={`/${recipe.recipe.toLowerCase()}`}
+                render={() => (
+                  <RecipePane
+                    displayRecipe={recipe.recipe.toLowerCase()}
+                    handleDelete={this.deleteRecipe}
+                    handleEdit={this.toggleDialogDisplay}
+                    contents={this.state.recipes.find(r => r.recipe.toLowerCase() === recipe.recipe.toLowerCase())}
+                  />
+                )}
+              />
+            ))}
+            <div className="add-button">
+              <button id="add-recipe" title="Add Recipe" onClick={this.toggleDialogDisplay}>
+                <i className="far fa-plus-square" />
+              </button>
+            </div>
+          </div>
+        </Switch>
+      </Router>
     );
   }
 }

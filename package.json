@@ -16,5 +16,8 @@
     "deploy": "gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "react-router-dom": "^4.3.1"
   }
 }

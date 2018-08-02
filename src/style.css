@@ -60,10 +60,20 @@ button:hover {
 #index-view .index-view-item {
     padding: 7px;
     cursor: pointer;
+    text-decoration: none;
+    display: block;
 }
 
 #index-view .index-view-item:hover {
     color: #481D24
+}
+
+a[id*=delete-],
+a[id*=edit-] {
+    color: yellow;
+    display: flex;
+    margin: 5px;
+    float: left;
 }
 
 .active {

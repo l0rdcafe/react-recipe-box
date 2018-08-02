@@ -1,10 +1,17 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const IndexView = ({ contents, handleClick }) => {
   const items = contents.map((recipe, i) => (
-    <div onClick={handleClick} key={i} className="index-view-item" id={`view-${recipe.recipe.toLowerCase()}`}>
+    <Link
+      to={`/${recipe.recipe.toLowerCase()}`}
+      onClick={handleClick}
+      key={i}
+      className="index-view-item"
+      id={`view-${recipe.recipe.toLowerCase()}`}
+    >
       {recipe.recipe.replace(/-/g, " ")}
-    </div>
+    </Link>
   ));
 
   return <div id="index-view">{items}</div>;
