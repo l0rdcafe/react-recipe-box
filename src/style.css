@@ -70,10 +70,19 @@ button:hover {
 
 a[id*=delete-],
 a[id*=edit-] {
-    color: yellow;
-    display: flex;
-    margin: 5px;
-    float: left;
+    color: #481D24;
+    display: inline;
+}
+
+a[id*=edit-] {
+    position: relative;
+    top: -1px;
+    left: 8px;
+}
+
+a:active,
+a:focus {
+    color: #481D24;
 }
 
 .active {

@@ -57,14 +57,22 @@ class App extends React.Component {
     if (recipeName.endsWith("-")) {
       recipeName = recipeName.slice(0, -1);
     }
+
     const newRecipe = {
       recipe: recipeName,
       ingredients: document.getElementById(dialogIDs[1]).value.split("\\"),
       directions: document.getElementById(dialogIDs[2]).value.split("\\")
     };
-    const { recipes } = this.state;
 
-    if (newRecipe.recipe !== "") {
+    const recipes = LSM.get("recipe-item");
+    const recipeList = this.getRecipeList();
+
+    if (newRecipe.recipe === "") {
+      alert("Recipe must have name");
+    } else if (recipeList.indexOf(recipeName.toLowerCase()) !== -1) {
+      recipeName = recipeName.replace("-", " ");
+      alert(`${recipeName} has already been added to the Recipe Box`);
+    } else {
       recipes.push(newRecipe);
       LSM.set(recipes);
       setTimeout(() => {
@@ -84,14 +92,15 @@ class App extends React.Component {
   deleteRecipe = e => {
     let tabToFocus;
     const recipeList = this.getRecipeList();
-    if (recipeList.indexOf(e.currentTarget.value.toLowerCase()) >= 1) {
-      tabToFocus = recipeList[recipeList.indexOf(e.currentTarget.value.toLowerCase()) - 1]
-        ? recipeList[recipeList.indexOf(e.currentTarget.value.toLowerCase()) - 1]
+    const { value } = e.currentTarget.attributes[2];
+    if (recipeList.indexOf(value) >= 1) {
+      tabToFocus = recipeList[recipeList.indexOf(value) - 1]
+        ? recipeList[recipeList.indexOf(value) - 1]
         : recipeList[0];
     }
 
     this.showRecipe(tabToFocus);
-    const recipes = this.state.recipes.filter(recipe => recipe.recipe.toLowerCase() !== e.currentTarget.value);
+    const recipes = this.state.recipes.filter(recipe => recipe.recipe.toLowerCase() !== value);
     LSM.set(recipes);
     this.setState({ recipes, currRecipe: tabToFocus });
   };
@@ -100,12 +109,8 @@ class App extends React.Component {
       return null;
     }
     const recipe = this.state.recipes.find(r => r.recipe.toLowerCase() === str);
-    console.log(recipe);
 
     setTimeout(() => {
-      document.getElementById("edit-recipe-name").value = recipe.recipe.replace(/-/g, " ");
-      document.getElementById("edit-ingredients").value = recipe.ingredients.join(" \\ ");
-      document.getElementById("edit-directions").value = recipe.directions.join(" \\\n\n");
       this.setState({ editThis: recipe.recipe.toLowerCase() });
     }, 10);
   };
@@ -124,46 +129,52 @@ class App extends React.Component {
       this.state.dialogType === "Add Recipe"
         ? ["add-recipe-name", "add-ingredients", "add-directions", "add-submit", "add-close"]
         : ["edit-recipe-name", "edit-ingredients", "edit-directions", "edit-submit", "edit-close"];
-    let dialogBox;
-
-    if (this.state.showDialog) {
-      dialogBox = (
-        <div className="dialog-box dialog-wrap">
-          <Dialog
-            dialogType={dialogText[0]}
-            buttonType={dialogText[1]}
-            nameID={dialogIDs[0]}
-            ingredientsID={dialogIDs[1]}
-            directionsID={dialogIDs[2]}
-            submitID={dialogIDs[3]}
-            closeID={dialogIDs[4]}
-            handleSubmit={this.setDialogType}
-            handleClose={this.toggleDialogDisplay}
-          />
-        </div>
-      );
-    }
     return (
       <Router>
         <Switch>
           <div className="recipe-box-wrapper">
             <div className="heading">Recipe Box</div>
-            {dialogBox}
             <IndexView handleClick={this.showOnClick} contents={this.state.recipes} />
-            <Route exact path="/" render={() => <Redirect to={this.state.currRecipe ? `/${this.state.currRecipe}` : ""} />} />
+            <Route
+              exact
+              path="/"
+              render={() => <Redirect to={this.state.currRecipe ? `/${this.state.currRecipe}` : ""} />}
+            />
             {this.state.recipes.map(recipe => (
-              <Route
-                key={recipe.recipe}
-                path={`/${recipe.recipe.toLowerCase()}`}
-                render={() => (
-                  <RecipePane
-                    displayRecipe={recipe.recipe.toLowerCase()}
-                    handleDelete={this.deleteRecipe}
-                    handleEdit={this.toggleDialogDisplay}
-                    contents={this.state.recipes.find(r => r.recipe.toLowerCase() === recipe.recipe.toLowerCase())}
-                  />
-                )}
-              />
+              <div>
+                <Route
+                  key={recipe.recipe}
+                  path={`/${recipe.recipe.toLowerCase()}`}
+                  render={() => (
+                    <RecipePane
+                      displayRecipe={recipe.recipe.toLowerCase()}
+                      handleDelete={this.deleteRecipe}
+                      handleEdit={this.toggleDialogDisplay}
+                      contents={this.state.recipes.find(r => r.recipe.toLowerCase() === recipe.recipe.toLowerCase())}
+                    />
+                  )}
+                />
+                <Route
+                  key={`edit-${recipe.recipe.toLowerCase()}`}
+                  path={`/${recipe.recipe.toLowerCase()}/edit`}
+                  render={() => (
+                    <div className="dialog-box dialog-wrap">
+                      <Dialog
+                        dialogType={dialogText[0]}
+                        buttonType={dialogText[1]}
+                        nameID={dialogIDs[0]}
+                        ingredientsID={dialogIDs[1]}
+                        directionsID={dialogIDs[2]}
+                        submitID={dialogIDs[3]}
+                        closeID={dialogIDs[4]}
+                        handleSubmit={this.setDialogType}
+                        handleClose={this.toggleDialogDisplay}
+                        currRecipe={recipe}
+                      />
+                    </div>
+                  )}
+                />
+              </div>
             ))}
             <div className="add-button">
               <button id="add-recipe" title="Add Recipe" onClick={this.toggleDialogDisplay}>
