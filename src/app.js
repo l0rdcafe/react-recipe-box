@@ -53,7 +53,6 @@ class App extends React.Component {
       type === "Add Recipe"
         ? ["add-recipe-name", "add-ingredients", "add-directions"]
         : ["edit-recipe-name", "edit-ingredients", "edit-directions"];
-    console.log(dialogIDs);
     let recipeName = document.getElementById(dialogIDs[0]).value.replace(/\s+/g, "-");
 
     if (recipeName.endsWith("-")) {
