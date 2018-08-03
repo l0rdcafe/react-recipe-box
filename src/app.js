@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect, Link } from "react-router-dom";
 import LSM from "./local-storage-manager";
 import recipesArr from "./recipes";
 import Dialog from "./dialog";
@@ -9,7 +9,8 @@ import RecipePane from "./recipe-pane";
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const recipes = LSM.get("recipe-item").length === 0 ? recipesArr : LSM.get("recipe-item");
+    const recipes =
+      !LSM.get("recipe-item") || LSM.get("recipe-item").length === 0 ? recipesArr : LSM.get("recipe-item");
     const currRecipe =
       recipes.length > 1
         ? recipes[1].recipe
@@ -24,16 +25,16 @@ class App extends React.Component {
     this.state = {
       showDialog: false,
       recipes,
-      dialogType: "",
+      dialogType: "Add Recipe",
       currRecipe
     };
   }
   getRecipeList = () => this.state.recipes.map(recipe => recipe.recipe.toLowerCase());
   setDialogType = () => {
     if (this.state.dialogType === "Add Recipe") {
-      this.addRecipe();
+      this.addRecipe(this.state.dialogType);
     } else {
-      this.editRecipe();
+      this.editRecipe(this.state.dialogType);
     }
   };
   showRecipe = recipe => {
@@ -47,11 +48,12 @@ class App extends React.Component {
       .join("-");
     this.showRecipe(currRecipe);
   };
-  addRecipe = () => {
+  addRecipe = type => {
     const dialogIDs =
-      this.state.dialogType === "Add Recipe"
+      type === "Add Recipe"
         ? ["add-recipe-name", "add-ingredients", "add-directions"]
         : ["edit-recipe-name", "edit-ingredients", "edit-directions"];
+    console.log(dialogIDs);
     let recipeName = document.getElementById(dialogIDs[0]).value.replace(/\s+/g, "-");
 
     if (recipeName.endsWith("-")) {
@@ -124,11 +126,6 @@ class App extends React.Component {
     this.populateFormData(val);
   };
   render() {
-    const dialogText = this.state.dialogType === "Add Recipe" ? ["Add a Recipe", "Add"] : ["Edit Recipe", "Save"];
-    const dialogIDs =
-      this.state.dialogType === "Add Recipe"
-        ? ["add-recipe-name", "add-ingredients", "add-directions", "add-submit", "add-close"]
-        : ["edit-recipe-name", "edit-ingredients", "edit-directions", "edit-submit", "edit-close"];
     return (
       <Router>
         <Switch>
@@ -160,13 +157,13 @@ class App extends React.Component {
                   render={() => (
                     <div className="dialog-box dialog-wrap">
                       <Dialog
-                        dialogType={dialogText[0]}
-                        buttonType={dialogText[1]}
-                        nameID={dialogIDs[0]}
-                        ingredientsID={dialogIDs[1]}
-                        directionsID={dialogIDs[2]}
-                        submitID={dialogIDs[3]}
-                        closeID={dialogIDs[4]}
+                        dialogType="Edit Recipe"
+                        buttonType="Save"
+                        nameID="edit-recipe-name"
+                        ingredientsID="edit-ingredients"
+                        directionsID="edit-directions"
+                        submitID="edit-submit"
+                        closeID="edit-close"
                         handleSubmit={this.setDialogType}
                         handleClose={this.toggleDialogDisplay}
                         currRecipe={recipe}
@@ -176,10 +173,29 @@ class App extends React.Component {
                 />
               </div>
             ))}
+            <Route
+              path="/new"
+              render={() => (
+                <div className="dialog-box dialog-wrap">
+                  <Dialog
+                    dialogType="Add a Recipe"
+                    buttonType="Add"
+                    nameID="add-recipe-name"
+                    ingredientsID="add-ingredients"
+                    directionsID="add-directions"
+                    submitID="add-submit"
+                    closeID="add-close"
+                    handleSubmit={this.setDialogType}
+                    handleClose={this.toggleDialogDisplay}
+                    currRecipe={this.state.recipes.find(r => r.recipe.toLowerCase() === this.state.currRecipe)}
+                  />
+                </div>
+              )}
+            />
             <div className="add-button">
-              <button id="add-recipe" title="Add Recipe" onClick={this.toggleDialogDisplay}>
-                <i className="far fa-plus-square" />
-              </button>
+              <Link to="/new" id="add-recipe" title="Add Recipe" onClick={this.toggleDialogDisplay}>
+                <i className="far fa-plus-square fa-lg fa-2x" />
+              </Link>
             </div>
           </div>
         </Switch>
