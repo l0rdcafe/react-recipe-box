@@ -192,8 +192,15 @@ class App extends React.Component {
               )}
             />
             <div className="add-button">
-              <Link to="/new" id="add-recipe" title="Add Recipe" onClick={this.toggleDialogDisplay}>
-                <i className="far fa-plus-square fa-lg fa-2x" />
+              <Link to="/new">
+                <button
+                  className="unstyle-button"
+                  id="add-recipe"
+                  title="Add Recipe"
+                  onClick={this.toggleDialogDisplay}
+                >
+                  <i className="far fa-plus-square fa-lg fa-2x" />
+                </button>
               </Link>
             </div>
           </div>

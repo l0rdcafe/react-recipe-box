@@ -7,23 +7,27 @@ const RecipePane = ({ displayRecipe, handleDelete, handleEdit, contents }) => {
       <div className="recipe-title">
         <div className="recipe-view-name title-row">{contents.recipe.replace(/-/g, " ")}</div>
         <div className="title-row">
-          <Link
-            to="/"
-            id={`delete-${displayRecipe.toLowerCase()}`}
-            onClick={handleDelete}
-            title="Delete Recipe"
-            value={displayRecipe}
-          >
-            <i className="fa fa-trash fa-lg fa-2x" />
+          <Link to="/">
+            <button
+              id={`delete-${displayRecipe.toLowerCase()}`}
+              onClick={handleDelete}
+              title="Delete Recipe"
+              value={displayRecipe}
+              className="unstyle-button"
+            >
+              <i className="fa fa-trash fa-lg fa-2x" />
+            </button>
           </Link>
-          <Link
-            to={`/${displayRecipe.toLowerCase()}/edit`}
-            id={`edit-${displayRecipe.toLowerCase()}`}
-            onClick={handleEdit}
-            title="Edit Recipe"
-            value={displayRecipe}
-          >
-            <i className="fas fa-edit fa-lg fa-2x" />
+          <Link to={`/${displayRecipe.toLowerCase()}/edit`}>
+            <button
+              id={`edit-${displayRecipe.toLowerCase()}`}
+              onClick={handleEdit}
+              title="Edit Recipe"
+              value={displayRecipe}
+              className="unstyle-button"
+            >
+              <i className="fas fa-edit fa-lg fa-2x" />
+            </button>
           </Link>
         </div>
       </div>

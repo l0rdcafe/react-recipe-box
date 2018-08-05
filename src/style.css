@@ -1,170 +1,67 @@
-@import url('https://fonts.googleapis.com/css?family=Fugaz+One|Sonsie+One|Montserrat');
-
-body {
-  background: #79B473;
-  color: white;
+:root {
+    font: 600 16px "Open Sans", sans-serif;
 }
 
-.recipe-title, h4, .index-view-item, .dialog-box  {
-  font-family: Fugaz One;
+body {
+    background: #bdc3c7;
+    margin: 0;
+}
+
+.container {
+    min-height: 100vh;
+    max-width: 730px;
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .recipe-box-wrapper {
-  margin: 20px 15%;
+    background: #ecf0f1;
+    border-radius: 4px 4px 0 0;
+    width: 100%;
+    box-shadow: 0 0 2px  1px rgba(0, 0, 0, 0.1);
+    max-width: calc(100% - 20px);
+    display: flex;
+    flex-direction: column;
 }
 
 .heading {
-  font-size: 40px;
-  text-align: center;
-  margin-bottom: 20px;
-  font-family: Sonsie One;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
 }
 
-.heading div,
-.heading i {
-    display: inline-block;
-    margin-right: 15px;
+.recipe-list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
 }
 
-button:hover {
-  cursor: pointer;
-}
-
-.unstyle-button {
-  background: none;
-  border: none;
-  outline: none;
-  font-size: 32px;
-  color: #481D24;
-}
-
-.unstyle-button:hover {
-    color: #79B473;
-}
-
-#index-view {
-  height: 95px;
-  overflow: auto;
-  margin-bottom: 5px;
-  border: 5px solid #084C61;
-  border-bottom: 10px solid #084C61;
-  border-top: 10px solid #084C61;
-  border-radius: 10px;
-}
-
-#index-view .index-view-item:nth-child(odd) {
-    color: #79B473;
-    background: #084C61;
-}
-
-#index-view .index-view-item {
-    padding: 7px;
-    cursor: pointer;
+.recipe-list a {
     text-decoration: none;
-    display: block;
+    color: #084C61;
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #084C61;
+    letter-spacing: 0.5px;
+    box-sizing: border-box;
+    box-shadow: 0 1px 0 0 #e6e6e6, 0 2px 0 0 white;
+    border-top: 1px solid #084C61;
+    border-bottom: 1px solid #084C61;
+    padding: 1%;
+    transition: background 0.25s;
 }
 
-#index-view .index-view-item:hover {
-    color: #481D24
+.recipe-list a:hover {
+    background: #e6e6e6;
 }
 
-a[id*=delete-],
-a[id*=edit-] {
-    color: #481D24;
-    display: inline;
-}
-
-a[id*=edit-] {
-    position: relative;
-    top: -1px;
-    left: 8px;
-}
-
-a:active,
-a:focus {
-    color: #481D24;
-}
-
-.active {
-  background: #084C61;
-  border: 2px  solid #084C61;
-  color: #79B473;
-}
-
-.add-button {
-  background: #084C61;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  padding: 5px;
-}
-
-.add-button button {
-    background: none;
-    border: none;
-    outline: none;
-    font-size: 32px;
-    color: #481D24;
-}
-
-.recipe-view .recipe-title button {
-    background: none;
-    border: none;
-    outline: none;
-    font-size: 32px;
-    color: #481D24;
-}
-
-.recipe-view .list {
-    max-width: 600px;
-}
-
-.recipe-view .recipe-body {
-    background: #481D24;
-    height: 330px;
-    overflow-y: scroll;
-    padding: 0 10px;
-    font-family: Montserrat;
-}
-
-.recipe-view .recipe-body h4 {
-    letter-spacing: 0.1em;
-}
-
-.recipe-view .recipe-title {
-    background: #084C61;
-    padding: 10px;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
-}
-
-.recipe-view .recipe-title .title-row {
-    display: inline-block;
-}
-
-.recipe-view .recipe-title .fa-edit {
-    vertical-align: bottom;
-}
-
-.recipe-view .recipe-title div:first-of-type {
-    margin-right: 10px;
-    font-size: 30px;
-    font-weight: bold;
-}
-
-.dialog-wrap {
-  box-shadow: 2px 10px 10px 5000px rgba(0, 0, 0, .6) !important;
-}
-
-.dialog-box textarea {
-    margin-bottom: 10px;
-    background: #556670;
-    min-width: 300px;
-    min-height: 60px;
-    resize: vertical;
-    color: darken(#084C61, 10%);
-    font-weight: bold;
-    font-size: 13px;
-    overflow: auto;
+.recipe-list a:last-of-type {
+    border-right: 0;
 }
 
 .dialog-box textarea:focus {
@@ -173,8 +70,44 @@ a:focus {
     border: 1px solid #79B473;
 }
 
-.dialog-box textarea:nth-of-type(3) {
-    min-height: 100px;
+.dialog-box {
+    text-align: center;
+    position: fixed;
+    width: 500px;
+    min-width: 300px;
+    top: 50%;
+    left: 50%;
+    margin-left: -250px;
+    margin-top: -200px;
+    box-shadow: 0 0 2px black;
+    border-radius: 4px;
+    background: #e6e6e6;
+    z-index: 1000;
+  }
+
+  .dialog-box a {
+      text-decoration: none;
+  }
+
+  .dialog-box .input-title {
+    margin: 5px;
+}
+
+.dialog-box .corner-close {
+    background: none;
+    border: none;
+    outline: none;
+    color: #481D24;
+    font-size: 20px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    transition: color 0.25s;
+}
+
+.dialog-box .corner-close:hover {
+    color: #084C61;
 }
 
 .dialog-box textarea:first-of-type {
@@ -182,87 +115,90 @@ a:focus {
     min-height: 15px;
 }
 
-.dialog-box .input-title {
-    margin: 5px;
-}
-
-.dialog-box button:not(:first-of-type) {
-    margin-bottom: 15px;
-}
-
-.dialog-box button {
-    font-family: Fugaz One;
-    font-size: 15px;
-    margin-right: 8px;
-    background: darken(#084C61, 5%);
-    border-radius: 5px;
-    background: none;
-    border: none;
-    outline: none;
-    font-size: 32px;
-    color: #481D24;
-}
-
-.dialog-box .corner-close {
-    background: none;
-    border: none;
-    outline: none;
-    font-size: 32px;
-    color: #481D24;
-    font-size: 24px ;
+.dialog-box textarea {
+    margin-bottom: 10px;
+    background: #ecf0f1;
+    min-width: 300px;
+    min-height: 60px;
+    resize: vertical;
     color: darken(#084C61, 10%);
-    position: absolute;
-    top: 5px;
-    right: 5px;
+    font-weight: bold;
+    font-size: 13px;
+    overflow: auto;
+    border: 1px solid #084C61;
 }
 
-.dialog-box {
-  text-align: center;
-  position: fixed;
-  width: 500px;
-  min-width: 300px;
-  top: 50%;
-  left: 50%;
-  margin-left: -250px;
-  margin-top: -200px;
-  box-shadow: 3px 3px 10px black;
-  border-radius: 15px;
-  background: #616196;
-  z-index: 1000;
-}
+.dialog-wrap {
+    box-shadow: 2px 10px 10px 5000px rgba(0, 0, 0, .6);
+  }
+  
+  .dialog-box textarea:nth-of-type(3) {
+      min-height: 100px;
+  }
 
-@media screen and (max-width: 750px) {
-  .recipe-box-wrapper {
-    margin: 5%;
+.unstyle-button {
+    background: none;
+    border: none;
+    outline: none;
+    color: #481D24;
+    cursor: pointer;
+    transition: color 0.25s;
   }
-  .heading {
-    font-size: 30px;
-    margin-bottom: 5px;
-    margin-top: 5px;
+  
+  .unstyle-button:hover {
+      color: #79B473;
   }
-}
 
-@media screen and (max-width: 350px) {
-  .dialog-box {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    margin-left: 0;
-    margin-top: 0;
-    box-shadow: none;
-    border-radius: 0;
+  .recipe-view {
+      padding: 4%;
   }
-  .recipe-box-wrapper {
-    margin: 0;
+
+  .add-button {
+      padding-bottom: 4%;
+      display: block;
+      margin: 0 auto;
   }
-  .heading {
-    font-size: 24px;
-    margin-bottom: 5px;
-    margin-top: 5px;
+
+  .recipe-view-name {
+      font-size: 1.5rem;
+      color: #2182a0;
+      text-align: center;
   }
+
   .recipe-body {
-    max-height: 200px;
+      width: 100%;
   }
-}
 
+  button[title="Edit Recipe"],
+  button[title="Delete Recipe"] {
+      float: right;
+  }
+
+  .submit-btn,
+  .edit-btn {
+      padding: 1% 2%;
+      background: #bdc3c7;
+      margin: 2%;
+      border-radius: 2px;
+      font-size: 0.75rem;
+      transition: all 0.25s;
+  }
+
+  .submit-btn:hover,
+  .edit-btn:hover {
+      color: #084C61;
+      background: rgba(0, 0, 0, .1);
+  }
+
+  @media (max-width: 700px) {
+      * {
+          font-size: 0.75rem;
+      }
+      .heading {
+          font-size: 1.5rem;
+      }
+
+      .recipe-view-name {
+          font-size: 1.15rem;
+      }
+  }

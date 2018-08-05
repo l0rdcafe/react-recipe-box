@@ -38,14 +38,20 @@ const Dialog = ({
       }
     />
     <br />
-    <Link to={`/${currRecipe.recipe.toLowerCase()}`} className="corner-close" onClick={handleClose}>
-      <i className="fa fa-times fa-lg" />
+    <Link to={`/${currRecipe.recipe.toLowerCase()}`}>
+      <button className="corner-close" onClick={handleClose}>
+        <i className="fa fa-times fa-lg" />
+      </button>
     </Link>
-    <Link to={`/${currRecipe.recipe.toLowerCase()}`} id={submitID} onClick={handleSubmit}>
-      {buttonType}
+    <Link to={`/${currRecipe.recipe.toLowerCase()}`}>
+      <button id={submitID} onClick={handleSubmit} className="unstyle-button submit-btn">
+        {buttonType}
+      </button>
     </Link>
-    <Link to={`/${currRecipe.recipe.toLowerCase()}`} id={closeID} onClick={handleClose}>
-      Close
+    <Link to={`/${currRecipe.recipe.toLowerCase()}`}>
+      <button id={closeID} onClick={handleClose} className="unstyle-button edit-btn">
+        Close
+      </button>
     </Link>
   </div>
 );

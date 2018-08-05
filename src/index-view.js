@@ -1,20 +1,24 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const IndexView = ({ contents, handleClick }) => {
   const items = contents.map((recipe, i) => (
-    <Link
+    <NavLink
       to={`/${recipe.recipe.toLowerCase()}`}
-      onClick={handleClick}
       key={i}
-      className="index-view-item"
-      id={`view-${recipe.recipe.toLowerCase()}`}
+      activeStyle={{ color: "#79B473", backgroundColor: "#084C61" }}
     >
-      {recipe.recipe.replace(/-/g, " ")}
-    </Link>
+      <span onClick={handleClick} className="recipe-list__item" id={`view-${recipe.recipe.toLowerCase()}`}>
+        {recipe.recipe.replace(/-/g, " ")}
+      </span>
+    </NavLink>
   ));
 
-  return <div id="index-view">{items}</div>;
+  return (
+    <div id="index-view" className="recipe-list">
+      {items}
+    </div>
+  );
 };
 
 export default IndexView;
