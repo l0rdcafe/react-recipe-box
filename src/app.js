@@ -1,10 +1,63 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Redirect, Link } from "react-router-dom";
+import styled from "styled-components";
 import LSM from "./local-storage-manager";
 import recipesArr from "./recipes";
 import Dialog from "./dialog";
 import IndexView from "./index-view";
 import RecipePane from "./recipe-pane";
+
+const DialogWrap = styled.div`
+  box-shadow: 2px 10px 10px 5000px rgba(0, 0, 0, 0.6);
+`;
+
+const RecipeBoxWrapper = styled.div`
+  background: #fff;
+  border-radius: 4px 4px 0 0;
+  width: 100%;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.4);
+  max-width: calc(100% - 20px);
+  display: flex;
+  flex-direction: column;
+
+  .heading {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .add-button {
+    padding-bottom: 4%;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .unstyle-button {
+    background: none;
+    border: none;
+    outline: none;
+    color: #176f8a;
+    cursor: pointer;
+    transition: opacity 0.25s;
+  }
+
+  .unstyle-button:hover {
+    opacity: 0.6;
+  }
+
+  @media (max-width: 700px) {
+    * {
+      font-size: 0.75rem;
+    }
+    .heading {
+      font-size: 1.5rem;
+    }
+
+    .recipe-view-name {
+      font-size: 1.15rem;
+    }
+  }
+`;
 
 class App extends React.Component {
   constructor(props) {
@@ -128,7 +181,7 @@ class App extends React.Component {
     return (
       <Router>
         <Switch>
-          <div className="recipe-box-wrapper">
+          <RecipeBoxWrapper>
             <div className="heading">Recipe Box</div>
             <IndexView handleClick={this.showOnClick} contents={this.state.recipes} />
             <Route
@@ -154,7 +207,7 @@ class App extends React.Component {
                   key={`edit-${recipe.recipe.toLowerCase()}`}
                   path={`/${recipe.recipe.toLowerCase()}/edit`}
                   render={() => (
-                    <div className="dialog-box dialog-wrap">
+                    <DialogWrap>
                       <Dialog
                         dialogType="Edit Recipe"
                         buttonType="Save"
@@ -167,7 +220,7 @@ class App extends React.Component {
                         handleClose={this.toggleDialogDisplay}
                         currRecipe={recipe}
                       />
-                    </div>
+                    </DialogWrap>
                   )}
                 />
               </div>
@@ -175,7 +228,7 @@ class App extends React.Component {
             <Route
               path="/new"
               render={() => (
-                <div className="dialog-box dialog-wrap">
+                <DialogWrap>
                   <Dialog
                     dialogType="Add a Recipe"
                     buttonType="Add"
@@ -188,7 +241,7 @@ class App extends React.Component {
                     handleClose={this.toggleDialogDisplay}
                     currRecipe={this.state.recipes.find(r => r.recipe.toLowerCase() === this.state.currRecipe)}
                   />
-                </div>
+                </DialogWrap>
               )}
             />
             <div className="add-button">
@@ -203,7 +256,7 @@ class App extends React.Component {
                 </button>
               </Link>
             </div>
-          </div>
+          </RecipeBoxWrapper>
         </Switch>
       </Router>
     );
