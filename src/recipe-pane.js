@@ -9,7 +9,7 @@ const RecipeWrapper = styled.div`
 
   .recipe-view-name {
     font-size: 1.5rem;
-    color: #176f8a;
+    color: #000;
     text-transform: uppercase;
     text-align: center;
   }
