@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import AnimatedWrapper from "./animated-wrapper";
 
 const DialogWrapper = styled.div`
   text-align: center;
