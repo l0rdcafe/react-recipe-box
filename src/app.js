@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Redirect, Link } from "react-router-dom";
 import styled from "styled-components";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import LSM from "./local-storage-manager";
 import recipesArr from "./recipes";
 import Dialog from "./dialog";
@@ -180,84 +181,94 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <Switch>
-          <RecipeBoxWrapper>
-            <div className="heading">Recipe Box</div>
-            <IndexView handleClick={this.showOnClick} contents={this.state.recipes} />
-            <Route
-              exact
-              path="/"
-              render={() => <Redirect to={this.state.currRecipe ? `/${this.state.currRecipe}` : ""} />}
-            />
-            {this.state.recipes.map(recipe => (
-              <div>
-                <Route
-                  key={recipe.recipe}
-                  path={`/${recipe.recipe.toLowerCase()}`}
-                  render={() => (
-                    <RecipePane
-                      displayRecipe={recipe.recipe.toLowerCase()}
-                      handleDelete={this.deleteRecipe}
-                      handleEdit={this.toggleDialogDisplay}
-                      contents={this.state.recipes.find(r => r.recipe.toLowerCase() === recipe.recipe.toLowerCase())}
+        <Route
+          render={({ location }) => (
+            <TransitionGroup>
+              <CSSTransition key={location.key} timeout={1000} classNames="fade">
+                <Switch location={location}>
+                  <RecipeBoxWrapper>
+                    <div className="heading">Recipe Box</div>
+                    <IndexView handleClick={this.showOnClick} contents={this.state.recipes} />
+                    <Route
+                      exact
+                      path="/"
+                      render={() => <Redirect to={this.state.currRecipe ? `/${this.state.currRecipe}` : ""} />}
                     />
-                  )}
-                />
-                <Route
-                  key={`edit-${recipe.recipe.toLowerCase()}`}
-                  path={`/${recipe.recipe.toLowerCase()}/edit`}
-                  render={() => (
-                    <DialogWrap>
-                      <Dialog
-                        dialogType="Edit Recipe"
-                        buttonType="Save"
-                        nameID="edit-recipe-name"
-                        ingredientsID="edit-ingredients"
-                        directionsID="edit-directions"
-                        submitID="edit-submit"
-                        closeID="edit-close"
-                        handleSubmit={this.setDialogType}
-                        handleClose={this.toggleDialogDisplay}
-                        currRecipe={recipe}
-                      />
-                    </DialogWrap>
-                  )}
-                />
-              </div>
-            ))}
-            <Route
-              path="/new"
-              render={() => (
-                <DialogWrap>
-                  <Dialog
-                    dialogType="Add a Recipe"
-                    buttonType="Add"
-                    nameID="add-recipe-name"
-                    ingredientsID="add-ingredients"
-                    directionsID="add-directions"
-                    submitID="add-submit"
-                    closeID="add-close"
-                    handleSubmit={this.setDialogType}
-                    handleClose={this.toggleDialogDisplay}
-                    currRecipe={this.state.recipes.find(r => r.recipe.toLowerCase() === this.state.currRecipe)}
-                  />
-                </DialogWrap>
-              )}
-            />
-            <div className="add-button">
-              <Link to="/new">
-                <button
-                  className="unstyle-button"
-                  id="add-recipe"
-                  title="Add Recipe"
-                  onClick={this.toggleDialogDisplay}
-                >
-                  <i className="far fa-plus-square fa-lg fa-2x" />
-                </button>
-              </Link>
-            </div>
-          </RecipeBoxWrapper>
-        </Switch>
+                    {this.state.recipes.map(recipe => (
+                      <div>
+                        <Route
+                          key={recipe.recipe}
+                          path={`/${recipe.recipe.toLowerCase()}`}
+                          render={() => (
+                            <RecipePane
+                              displayRecipe={recipe.recipe.toLowerCase()}
+                              handleDelete={this.deleteRecipe}
+                              handleEdit={this.toggleDialogDisplay}
+                              contents={this.state.recipes.find(
+                                r => r.recipe.toLowerCase() === recipe.recipe.toLowerCase()
+                              )}
+                            />
+                          )}
+                        />
+                        <Route
+                          key={`edit-${recipe.recipe.toLowerCase()}`}
+                          path={`/${recipe.recipe.toLowerCase()}/edit`}
+                          render={() => (
+                            <DialogWrap>
+                              <Dialog
+                                dialogType="Edit Recipe"
+                                buttonType="Save"
+                                nameID="edit-recipe-name"
+                                ingredientsID="edit-ingredients"
+                                directionsID="edit-directions"
+                                submitID="edit-submit"
+                                closeID="edit-close"
+                                handleSubmit={this.setDialogType}
+                                handleClose={this.toggleDialogDisplay}
+                                currRecipe={recipe}
+                              />
+                            </DialogWrap>
+                          )}
+                        />
+                      </div>
+                    ))}
+                    <Route
+                      path="/new"
+                      render={() => (
+                        <DialogWrap>
+                          <Dialog
+                            dialogType="Add a Recipe"
+                            buttonType="Add"
+                            nameID="add-recipe-name"
+                            ingredientsID="add-ingredients"
+                            directionsID="add-directions"
+                            submitID="add-submit"
+                            closeID="add-close"
+                            handleSubmit={this.setDialogType}
+                            handleClose={this.toggleDialogDisplay}
+                            currRecipe={this.state.recipes.find(r => r.recipe.toLowerCase() === this.state.currRecipe)}
+                          />
+                        </DialogWrap>
+                      )}
+                    />
+                    <div className="add-button">
+                      <Link to="/new">
+                        <button
+                          className="unstyle-button"
+                          id="add-recipe"
+                          title="Add Recipe"
+                          onClick={this.toggleDialogDisplay}
+                        >
+                          <i className="far fa-plus-square fa-lg fa-2x" />
+                        </button>
+                      </Link>
+                    </div>
+                  </RecipeBoxWrapper>
+                </Switch>
+              </CSSTransition>
+            </TransitionGroup>
+          )}
+        />
       </Router>
     );
   }
